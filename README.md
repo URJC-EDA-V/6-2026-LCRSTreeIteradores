@@ -1,4 +1,10 @@
-# Implementación de árboles n-arios parte 2
-Partiendo de la interfaz NAryTree realizar la implementación del LCRSTree. 
-
-A continuación realizar la implementación de los iteradoradores PreOrderIterator y PostOrderIterator, que realizan el recorrido preorden y postorden, estudiados en el tema 2, sobre el árbol.
+# Ejercicio de árboles LCRS e iteradores asociados
+ 
+### Información del Proyecto
+ 
+| Descripción   | Detalles                           |
+|---------------|------------------------------------|
+| Profesores    | Sergio Cavero, Javier Yuste y María Teresa González de Lena   |
+| Asignatura    | Estructuras de Datos Avanzadas     |
+| Universidad   | Universidad Rey Juan Carlos        |
+| Licencia      | CC BY-NC-SA 4.0                    
