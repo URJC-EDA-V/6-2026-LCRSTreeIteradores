@@ -1,11 +1,8 @@
 package es.urjc.grafo.EDA.trees;
 
-import es.urjc.grafo.EDA.lists.LinkedPositionalList;
-import es.urjc.grafo.EDA.utils.Pair;
 import es.urjc.grafo.EDA.utils.Position;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
 

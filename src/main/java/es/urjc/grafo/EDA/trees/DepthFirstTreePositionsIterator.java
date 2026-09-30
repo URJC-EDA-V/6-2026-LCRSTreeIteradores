@@ -6,16 +6,16 @@ import es.urjc.grafo.EDA.utils.Position;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class PreOrderTreeIterator<T> implements Iterator<Position<T>> {
+public class DepthFirstTreePositionsIterator<T> implements Iterator<Position<T>> {
 
     private final LinkedPositionalList<Position<T>> nodesToVisit;
     private final Tree<T> tree;
 
-    public PreOrderTreeIterator(Tree<T> tree) {
+    public DepthFirstTreePositionsIterator(Tree<T> tree) {
         this(tree, tree.root());
     }
 
-    public PreOrderTreeIterator(Tree<T> tree, Position<T> root) {
+    public DepthFirstTreePositionsIterator(Tree<T> tree, Position<T> root) {
         this.tree = tree;
         this.nodesToVisit = new LinkedPositionalList<>();
         this.nodesToVisit.addFirst(root);
@@ -39,6 +39,7 @@ public class PreOrderTreeIterator<T> implements Iterator<Position<T>> {
             this.nodesToVisit.addBefore(current, child);
         }
         Position<T> element = current.getElement();
+        System.out.println(element.getElement());
         this.nodesToVisit.remove(current);
         return element;
     }

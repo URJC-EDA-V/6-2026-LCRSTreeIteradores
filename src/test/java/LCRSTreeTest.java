@@ -98,7 +98,7 @@ public class LCRSTreeTest {
 		this.tree.add(200, p);
 		this.tree.add(300, p);
 		StringBuilder salida = new StringBuilder();
-		for (Position<Integer> e : this.tree) {
+		for (Position<Integer> e : this.tree.positions()) {
 			salida.append(e.getElement());
 		}
 		Assertions.assertEquals("100200300", salida.toString());
@@ -140,7 +140,7 @@ public class LCRSTreeTest {
 		this.tree.remove(p2);
 
 		StringBuilder s = new StringBuilder();
-		for (Position<Integer> pos : this.tree) {
+		for (Position<Integer> pos : this.tree.positions()) {
 			s.append(pos.getElement());
 		}
 		Assertions.assertEquals("12354", s.toString());
@@ -200,7 +200,7 @@ public class LCRSTreeTest {
 		this.setTree();
 
 		StringBuilder s = new StringBuilder();
-		for (Position<Integer> pos : this.tree) {
+		for (Position<Integer> pos : this.tree.positions()) {
 			s.append(pos.getElement());
 		}
 		Assertions.assertEquals("123567891011124", s.toString());
@@ -243,7 +243,7 @@ public class LCRSTreeTest {
 		this.tree.swapElements(p2, p3);
 		
 		StringBuilder salida = new StringBuilder();
-		for (Position<Integer> e : this.tree) {
+		for (Position<Integer> e : this.tree.positions()) {
 			salida.append(e.getElement());
 		}
 		Assertions.assertEquals(salida.toString(), "321587691011124");
@@ -271,7 +271,7 @@ public class LCRSTreeTest {
 		this.tree.replace(p3, -4);
 		
 		StringBuilder salida = new StringBuilder();
-		for (Position<Integer> e : this.tree) {
+		for (Position<Integer> e : this.tree.positions()) {
 			salida.append(e.getElement());
 		}
 		Assertions.assertEquals(salida.toString(), "-12-25-37-491011124");

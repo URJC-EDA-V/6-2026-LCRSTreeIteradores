@@ -3,41 +3,29 @@ package es.urjc.grafo.EDA.trees;
 import es.urjc.grafo.EDA.utils.Position;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
-public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
+public class BreadthFirstTreeIterator<T> implements Iterator<T> {
 
-    Queue<Position<T>> nodesToVisit = new LinkedList<>();
-    Tree<T> tree;
+    Iterator<Position<T>> positionsIterator;
 
     public BreadthFirstTreeIterator(Tree<T> tree, Position<T> root) {
-        this.nodesToVisit.add(root);
-        this.tree = tree;
+        this.positionsIterator = new BreadthFirstTreePositionsIterator<>(tree, root);
     }
 
     public BreadthFirstTreeIterator(Tree<T> tree) {
         this(tree, tree.root());
     }
-    
+
     @Override
     public boolean hasNext() {
-        return !this.nodesToVisit.isEmpty();
+        return this.positionsIterator.hasNext();
     }
 
     /**
      * This method visits the nodes of a tree by following a breadth-first order
      */
     @Override
-    public Position<T> next() {
-        Position<T> currentPosition = this.nodesToVisit.poll();
-        if (!tree.isLeaf(currentPosition)) {
-            for (Position<T> child : tree.children(currentPosition)) {
-                this.nodesToVisit.add(child);
-            }
-        }
-        return currentPosition;
+    public T next() {
+        return this.positionsIterator.next().getElement();
     }
-
-   
 }

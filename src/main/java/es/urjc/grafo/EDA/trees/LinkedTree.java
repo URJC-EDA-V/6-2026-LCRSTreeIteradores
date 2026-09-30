@@ -2,7 +2,6 @@ package es.urjc.grafo.EDA.trees;
 
 import es.urjc.grafo.EDA.utils.Position;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,15 +50,26 @@ public class LinkedTree<E> implements NAryTree<E> {
     }
 
     /**
+     * Returns true if Position p does not have any children.
+     *
+     * @param p A valid Position within the tree
+     * @return true if p has zero children, false otherwise
+     * @throws IllegalArgumentException if p is not a valid Position for this tree.
+     */
+    @Override
+    public boolean isExternal(Position<E> p) throws IllegalArgumentException {
+        TreeNode<E> node = checkPosition(p);
+        return (node.getChildren() == null) || (node.getChildren().isEmpty());
+    }
+
+    /**
      * Returns whether a node is external.
      *
      * @param position
      * @return
      */
-    @Override
     public boolean isLeaf(Position<E> position) {
-        TreeNode<E> node = checkPosition(position);
-        return (node.getChildren() == null) || (node.getChildren().isEmpty());
+        return this.isExternal(position);
     }
 
     /**
@@ -115,16 +125,50 @@ public class LinkedTree<E> implements NAryTree<E> {
     }
 
     /**
+     * Returns the number of children of Position p.
+     *
+     * @param position A valid Position within the tree
+     * @return number of children of Position p
+     * @throws IllegalArgumentException if p is not a valid Position for this tree.
+     */
+    @Override
+    public int numChildren(Position<E> position) throws IllegalArgumentException {
+        TreeNode<E> node = checkPosition(position);
+        return node.children.size();
+    }
+
+    /**
      * Returns an iterator of the elements stored at the nodes. The nodes are
      * visited according to a breath-first search
      */
     @Override
-    public Iterator<Position<E>> iterator() {
+    public Iterator<E> iterator() {
         return new BreadthFirstTreeIterator<>(this); // An iterator of elements
     }
 
     /**
-     * Replaces the element at a node.
+     * Returns an iterable collection of the positions of the tree.
+     *
+     * @return iterable collection of the tree's positions
+     */
+    @Override
+    public Iterable<Position<E>> positions() {
+        return new PositionsIterable();
+    }
+
+    private class PositionsIterable implements Iterable<Position<E>> {
+        @Override
+        public Iterator<Position<E>> iterator() {
+            return new BreadthFirstTreePositionsIterator<>(LinkedTree.this);
+        }
+    }
+
+
+    /**
+     * Replaces element at position by the new element received
+     * @param position position which element must be replaced
+     * @param element element to be placed in position
+     * @return element previously contained in Position position
      */
     @Override
     public E replace(Position<E> position, E element) {
@@ -142,13 +186,13 @@ public class LinkedTree<E> implements NAryTree<E> {
         if (!isEmpty()) {
             throw new RuntimeException("Tree already has a root");
         }
-        root = new TreeNode<>(element, null, new ArrayList<>());
+        root = new TreeNode<>(element, null, new LinkedList<>());
         this.size++;
         return root;
     }
 
     /**
-     * Swap the elements at two nodes
+     * Swap the elements at two different nodes
      */
     @Override
     public void swapElements(Position<E> position1, Position<E> position2) {
@@ -166,7 +210,6 @@ public class LinkedTree<E> implements NAryTree<E> {
         if (!(position instanceof LinkedTree.TreeNode<E> aux)) {
             throw new RuntimeException("The position is invalid");
         }
-
         return aux;
     }
 
@@ -198,7 +241,6 @@ public class LinkedTree<E> implements NAryTree<E> {
         TreeNode<E> parent = checkPosition(position);
         TreeNode<E> newNode = new TreeNode<>(element, parent, new LinkedList<>());
         List<TreeNode<E>> l = parent.getChildren();
-        if (index > l.size()) throw new RuntimeException("The element cannot be inserted at the specified position.");
         l.add(index, newNode);
         this.size++;
         return newNode;
@@ -212,17 +254,20 @@ public class LinkedTree<E> implements NAryTree<E> {
     @Override
     public void remove(Position<E> position) {
         TreeNode<E> node = checkPosition(position);
+
+        // Remove node
         if (node.getParent() != null) {
             TreeNode<E> parent = node.getParent();
             parent.getChildren().remove(node);
-            Iterator<Position<E>> iterator = new BreadthFirstTreeIterator<>(this, position);
-            while (iterator.hasNext()) {
-                iterator.next();
-                this.size--;
-            }
         } else {
             this.root = null;
-            this.size = 0;
+        }
+
+        // Update size of the tree
+        Iterator<Position<E>> iterator = new BreadthFirstTreePositionsIterator<>(this, position);
+        while (iterator.hasNext()) {
+            iterator.next();
+            this.size--;
         }
     }
 
@@ -264,12 +309,10 @@ public class LinkedTree<E> implements NAryTree<E> {
 
         LinkedTree<E> lt = (LinkedTree<E>) otherTree;
         TreeNode<E> node = checkPosition(position);
-        int elements = lt.size(); //cuantos elementos tiene el árbol que añadimos
         if (!otherTree.isEmpty()) {
             TreeNode<E> r = checkPosition(otherTree.root());
             node.children.add(r);
             r.setParent(node);
-            this.size = this.size + elements; //el tamaño del árbol se modifica en esos elementos
             lt.root = null;
         }
     }
